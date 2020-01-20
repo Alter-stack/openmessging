@@ -6,8 +6,13 @@ type DefaultMessageStore struct {
 	NavigableMap map[int64][]message.Message
 }
 
-func (d *DefaultMessageStore) Put(message message.Message) {
-	panic("implement me")
+func (d *DefaultMessageStore) Put(m message.Message) {
+	messageList, ok := d.NavigableMap[m.T]
+	if !ok {
+		newMessageList := []message.Message{m}
+		d.NavigableMap[m.T] = newMessageList
+	}
+	messageList = append(messageList, m)
 }
 
 func (d DefaultMessageStore) GetMessage(aMin, aMax, tMin, tMax int64) []message.Message {
@@ -17,7 +22,6 @@ func (d DefaultMessageStore) GetMessage(aMin, aMax, tMin, tMax int64) []message.
 func (d DefaultMessageStore) GetAvgValue(aMin, aMax, tMin, tMax int64) int64 {
 	panic("implement me")
 }
-
 
 ///**
 // * 这是一个简单的基于内存的实现，以方便选手理解题意；
